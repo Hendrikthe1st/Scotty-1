@@ -1,0 +1,76 @@
+import simplegui
+
+milisec = 0
+sec = 0
+tensec = 0
+minu = 0
+counter = 0
+tries = 0
+wins = 0
+
+def stringconv(x):
+    x = str(x)
+    return x
+
+def start_handl():
+    global counter
+    counter = 1
+    
+def stop_handl():
+    global counter
+    global tries
+    global milisec
+    global wins
+    if counter != 0:
+        tries += 1
+        if milisec == 0:
+            wins += 1
+    counter = 0
+    
+def reset_handl():
+    global milisec
+    global tensec
+    global sec
+    global minu
+    global wins
+    global tries
+    milisec = 0
+    sec = 0
+    tensec = 0
+    minu = 0
+    tries = 0
+    wins = 0
+
+def timer_handler():
+    global milisec
+    global tensec
+    global sec
+    global minu
+    global counter
+    milisec += counter
+    if milisec == 9:
+        sec += 1
+        milisec = 0
+    elif tensec == 5 and sec == 9:
+        minu += 1
+        tensec = 0
+        sec = 0
+    elif sec == 9:
+        tensec += 1
+        sec = 0
+    
+def draw_handler(canvas):
+    win = stringconv(wins) + "/" + stringconv(tries)
+    time = stringconv(minu) + ":" + stringconv(tensec) + stringconv(sec) + "." + stringconv(milisec)
+    canvas.draw_text(time,(100,125),25,'White')
+    canvas.draw_text(win,(150,50),25,'Green')
+    
+frame = simplegui.create_frame('Timer',250,250)
+frame.set_draw_handler(draw_handler)
+frame.add_button('Start', start_handl)
+frame.add_button('Stop', stop_handl)
+frame.add_button('Reset', reset_handl)
+frame.start()  
+
+timer = simplegui.create_timer(100, timer_handler)
+timer.start()
