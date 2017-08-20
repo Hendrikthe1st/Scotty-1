@@ -1,0 +1,89 @@
+# Rock-paper-scissors-lizard-Spock template
+
+import random
+
+# The key idea of this program is to equate the strings
+# "rock", "paper", "scissors", "lizard", "Spock" to numbers
+# as follows:
+#
+# 0 - rock
+# 1 - Spock
+# 2 - paper
+# 3 - lizard
+# 4 - scissors
+
+# helper functions
+
+def name_to_number(name):
+    if name == "vogel":
+        return 0
+    elif name == "echse":
+        return 1
+    elif name == "schere":
+        return 2
+    elif name == "stein":
+        return 3
+    elif name == "papier":
+        return 4
+    else:
+        return "wrong"
+    
+
+
+def number_to_name(number):
+    if number == 0:
+        return "vogel"
+    elif number == 1:
+        return "echse"
+    elif number == 2:
+        return "schere"
+    elif number == 3:
+        return "stein"
+    elif number == 4:
+        return "papier"
+    else:
+        return "wrong"
+    
+def who_wins(x,y):
+    t = x - y
+    z = t % 5
+    if z == 0:
+        k = "tie"
+        return k
+    elif z <= 2:
+        k = "computer wins"
+        return k
+    elif z >= 3:
+        k = "player wins"
+        return k
+    else:
+        print "bug"
+    
+def rpsls(player_choice):   
+    # print a blank line to separate consecutive games
+    print ""
+    # print out the message for the player's choice
+    print "Player chooses",player_choice
+    # convert the player's choice to player_number using the function name_to_number()
+    player_number = name_to_number(player_choice)
+    # compute random guess for comp_number using random.randrange()
+    comp_number = random.randrange(0,5)
+    # convert comp_number to comp_choice using the function number_to_name()
+    comp_choice = number_to_name(comp_number)
+    # print out the message for computer's choice
+    print "Computer chooses",comp_choice
+    # compute difference of comp_number and player_number modulo five
+    absolute_result = who_wins(player_number,comp_number)
+    print absolute_result
+    
+# test your code - THESE CALLS MUST BE PRESENT IN YOUR SUBMITTED CODE
+rpsls("stein")
+rpsls("vogel")
+rpsls("papier")
+rpsls("echse")
+rpsls("schere")
+
+# always remember to check your completed program against the grading rubric
+
+
+
