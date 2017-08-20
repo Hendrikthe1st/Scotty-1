@@ -1,0 +1,192 @@
+#Pong
+#imported goods
+import simplegui
+import random
+
+
+#global values
+gutter =20
+width = 600
+height = 400
+plank_1 = [0,200]
+plank_2 = [0,300]
+plank2_1 = [width,200]
+plank2_2 = [width,300]
+vel = 0
+vel2 = 0
+player_1 = 0
+player_2 = 0
+
+beginner = 0
+beginner2 = 0
+speedcounter = 0.5
+ball_vel = [beginner,beginner2]
+ball_radius = 17
+ball_pos = [width / 2, height / 2]
+
+#string conversion
+def stringconversion(x):
+    x = str(x)
+    return x
+
+#Spawn ball
+def spawn_ball():
+    global beginner
+    global beginner2
+    global ball_vel
+    beginner = random.choice([-2,2])
+    beginner2 = random.choice([-3,3])
+    ball_vel = [beginner,beginner2]
+
+#drawing plank
+
+def draw_handler(canvas):
+    global plank_1
+    global plank_2
+    global plank2_1
+    global plank2_2
+    global vel
+    global vel2
+    global gutter
+    global player_1
+    global player_2
+    global ball_pos
+    global ball_vel
+    global beginner
+    global beginner2
+    # plankmovement updates
+    if plank_1[1] < 0:
+        plank_1[1] += 6
+        plank_2[1] += 6
+    elif plank_2[1] > height:
+        plank_1[1] -= 6
+        plank_2[1] -= 6
+    else:
+        plank_1[1] += vel
+        plank_2[1] += vel
+        
+    if plank2_1[1] < 0:
+        plank2_1[1] += 6
+        plank2_2[1] += 6
+    elif plank2_2[1] > height:
+        plank2_1[1] -= 6
+        plank2_2[1] -= 6
+    else:
+        plank2_1[1] += vel2
+        plank2_2[1] += vel2
+        
+    
+
+    # Draw ball
+    ball_pos[0] += ball_vel[0]
+    ball_pos[1] += ball_vel[1]
+    
+    # collide and reflect off of left hand side of canvas
+    if ball_pos[0] - ball_radius <= gutter and ball_pos[1] + ball_radius >= plank_1[1] and ball_pos[1] - ball_radius <= plank_2[1]:
+        ball_vel[0] = - ball_vel[0]
+        ball_vel[0] += speedcounter
+    elif ball_pos[0] + ball_radius >= width-gutter and ball_pos[1] + ball_radius >= plank2_1[1] and ball_pos[1] - ball_radius <= plank2_2[1]:
+        ball_vel[0] = - ball_vel[0]
+        ball_vel[0] -= speedcounter
+    elif ball_pos[0] - ball_radius <= gutter:
+        ball_vel[0] = - ball_vel[0]
+        player_2 += 1
+        beginner = -2
+        beginner2 = 3
+        ball_vel = [beginner,beginner2]
+        ball_pos = [width / 2, height / 2]
+    elif ball_pos[0] + ball_radius >= width-gutter:
+        ball_vel[0] = - ball_vel[0]
+        player_1 += 1
+        beginner = 2
+        beginner2 = -3
+        ball_vel = [beginner,beginner2]
+        ball_pos = [width / 2, height / 2]
+    elif ball_pos[1] + ball_radius >= height:
+        ball_vel[1] = - ball_vel[1]
+    elif ball_pos[1] - ball_radius <= 0:
+        ball_vel[1] = - ball_vel[1]
+        
+    # Draw line and ball
+    canvas.draw_line((plank_1),(plank_2), 40, "Red")
+    canvas.draw_line((plank2_1),(plank2_2), 40, "Blue")
+    canvas.draw_circle(ball_pos, ball_radius, 2, "White","Green")
+    #Deko lines
+    canvas.draw_line([width / 2, 0],[width / 2, height], 1, "White")
+    canvas.draw_line([gutter, 0],[gutter, height], 1, "White")
+    canvas.draw_line([width - gutter, 0],[width - gutter, height], 1, "White")
+    #Score
+    canvas.draw_text(stringconversion(player_1), (width/3, height/3), 50, 'Red')
+    canvas.draw_text(stringconversion(player_2), (width - width/3, height/3), 50, 'Blue')
+
+#making plank move
+def keydown(key):
+    global vel
+    global vel2
+    if key == simplegui.KEY_MAP["s"]:
+        vel = 5
+    elif key == simplegui.KEY_MAP["w"]:
+        vel = -5
+    elif key == simplegui.KEY_MAP["down"]:
+        vel2 = 5
+    elif key == simplegui.KEY_MAP["up"]:
+        vel2 = -5
+    else:
+        print "wrong key"
+
+#making plank stop    
+def keyup(key):
+    global vel
+    global vel2
+    if key == simplegui.KEY_MAP["s"]:
+        vel = 0
+    elif key == simplegui.KEY_MAP["w"]:
+        vel = 0
+    elif key == simplegui.KEY_MAP["down"]:
+        vel2 = 0
+    elif key == simplegui.KEY_MAP["up"]:
+        vel2 = 0
+    else:
+        print "wrong key"
+        
+#Reset
+def button_handler():
+    global plank_1
+    global plank_2
+    global plank2_1
+    global plank2_2
+    global vel
+    global vel2
+    global gutter
+    global player_1
+    global player_2
+    global ball_pos
+    global ball_vel
+    global beginner
+    global beginner2
+    gutter =20
+    width = 600
+    height = 400
+    plank_1 = [0,200]
+    plank_2 = [0,300]
+    plank2_1 = [width,200]
+    plank2_2 = [width,300]
+    vel = 0
+    vel2 = 0
+    player_1 = 0
+    player_2 = 0
+    beginner = 0
+    beginner2 = 0
+    speedcounter = 0.5
+    ball_vel = [beginner,beginner2]
+    ball_radius = 17
+    ball_pos = [width / 2, height / 2]
+
+   
+f = simplegui.create_frame("Pong", width, height)  
+button1 = f.add_button('Reset', button_handler)
+button2 = f.add_button('Spawn Ball', spawn_ball)
+f.set_draw_handler(draw_handler)
+f.set_keydown_handler(keydown)
+f.set_keyup_handler(keyup)
+f.start()
